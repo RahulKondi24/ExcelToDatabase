@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlClient;
 using ExcelToDatabase.Models;
+using ExcelToDatabase.Utilities;
 
 namespace ExcelToDatabase.Service
 {
@@ -32,9 +33,10 @@ namespace ExcelToDatabase.Service
                         command.Parameters.AddWithValue("@Gross", row.Gross);
                         command.Parameters.AddWithValue("@WorkingDays", row.WorkingDays);
                         command.Parameters.AddWithValue("@Salary", row.Salary);
-                        command.Parameters.AddWithValue("@EarnedBasic", "row.EarnedBasic");
-                        command.Parameters.AddWithValue("@HRA", "row.HRA");
-                        command.Parameters.AddWithValue("@SpecialAllowance", "row.SpecialAllowance");
+                        Salary salaryModel = SalaryCalculator.CalculateSalary(Convert.ToDecimal(row.Salary));
+                        command.Parameters.AddWithValue("@EarnedBasic", salaryModel.EarnedBasic);
+                        command.Parameters.AddWithValue("@HRA", salaryModel.HRA);
+                        command.Parameters.AddWithValue("@SpecialAllowance", salaryModel.SpecialAllowance);
                         command.Parameters.AddWithValue("@PT", row.PT);
                         command.Parameters.AddWithValue("@IT_TDS", row.IT_TDS);
                         command.Parameters.AddWithValue("@PF", row.PF);
