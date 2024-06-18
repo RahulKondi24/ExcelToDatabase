@@ -1,5 +1,6 @@
 ﻿using ExcelToDatabase.Models;
 using OfficeOpenXml;
+using System.Data;
 
 namespace ExcelToDatabase.Service
 {
@@ -11,14 +12,14 @@ namespace ExcelToDatabase.Service
         {
             _filePath = filePath;
         }
-        public async Task<List<ExcelData>> ReadDataFromExcelAsync()
+        public async Task<List<SalaryMetadata>> ReadDataFromExcelAsync()
         {
             // Set the license context
             ExcelPackage.LicenseContext = LicenseContext.Commercial;
 
             Console.WriteLine($"Starting to read data from Excel file at: {_filePath}");
 
-            List<ExcelData> data = new List<ExcelData>();
+            List<SalaryMetadata> data = new List<SalaryMetadata>();
             if (!File.Exists(_filePath))
             {
                 Console.WriteLine($"The specified Excel file does not exist at: {Path.GetFullPath(_filePath)}");
@@ -51,23 +52,25 @@ namespace ExcelToDatabase.Service
 
                     for (int row = 3; row <= rowCount; row++) // Start from row 3, assuming row 1 is the header
                     {
-                        ExcelData rowData = new ExcelData
+                        SalaryMetadata rowData = new SalaryMetadata
                         {
-                            EmployeeCode = worksheet.Cells[row, 3].Value?.ToString(),
-                            Leaves = worksheet.Cells[row, 6].Value?.ToString(),
-                            Gross = worksheet.Cells[row, 7].Value?.ToString(),
-                            WorkingDays = worksheet.Cells[row, 8].Value?.ToString(),
-                            Salary = worksheet.Cells[row, 9].Value?.ToString(),
-                            PT = worksheet.Cells[row, 10].Value?.ToString(),
-                            IT_TDS = worksheet.Cells[row, 11].Value?.ToString(),
-                            PF = worksheet.Cells[row, 12].Value?.ToString(),
-                            Advance = worksheet.Cells[row, 13].Value?.ToString(),
-                            CompanyPF = worksheet.Cells[row, 14].Value?.ToString(),
-                            NetAmount = worksheet.Cells[row, 15].Value?.ToString(),
+                            Emp_Code = worksheet.Cells[row, 3].Value?.ToString(),
+                            PaySlipForMonth = DateTime.Now.ToString("yyyy-MM"),
+                            DaysPaid = decimal.TryParse(worksheet.Cells[row, 8].Value?.ToString(), out var daysPaid) ? daysPaid : 0,
+                            AbsentDays = decimal.TryParse(worksheet.Cells[row, 6].Value?.ToString(), out var absentDays) ? absentDays : 0,
+                            EarnedBasic =0,
+                            HRA = 0,
+                            SpecialAllowance = 0,
+                            PFEmployeeShare = decimal.TryParse(worksheet.Cells[row, 12].Value?.ToString(), out var pfEmployeeShare) ? pfEmployeeShare : 0,
+                            ProfessionalTax = decimal.TryParse(worksheet.Cells[row, 10].Value?.ToString(), out var professionalTax) ? professionalTax : 0,
+                            TDS = decimal.TryParse(worksheet.Cells[row, 11].Value?.ToString(), out var tds) ? tds : 0,
+                            EarningTotal = decimal.TryParse(worksheet.Cells[row, 15].Value?.ToString(), out var earningTotal) ? earningTotal : 0,
+                            TotalDeductions = 0,
+                            NetPay = decimal.TryParse(worksheet.Cells[row, 15].Value?.ToString(), out var netPay) ? netPay : 0,
                         };
                         Console.WriteLine($"Reading row {row - 2}");
                         data.Add(rowData);
-                        Console.WriteLine($"Added employee {rowData.EmployeeCode} to the list.");
+                        Console.WriteLine($"Added employee {rowData.Emp_Code} to the list.");
                     }
                 }
                 Console.WriteLine("Finished reading data from Excel.");

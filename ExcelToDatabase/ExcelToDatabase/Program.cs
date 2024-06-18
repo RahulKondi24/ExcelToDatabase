@@ -26,4 +26,3 @@ await databaseService.InsertDataIntoDatabaseAsync(data);
 
 Console.WriteLine("Data has been inserted into the database.");
 Console.WriteLine("Application finished.");
-Console.ReadLine();
