@@ -17,8 +17,8 @@ if (!File.Exists(excelFilePath))
 }
 
 // Read data from Excel file
-var excelDataService = new ExcelDataService();
-var data = await excelDataService.ReadDataFromExcelAsync(excelFilePath);
+var excelDataService = new ExcelDataService(excelFilePath);
+var data = await excelDataService.ReadDataFromExcelAsync();
 
 // Insert data into the database
 var databaseService = new DatabaseService(connectionString);

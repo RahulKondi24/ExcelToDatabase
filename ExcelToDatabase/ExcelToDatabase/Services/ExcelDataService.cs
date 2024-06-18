@@ -5,21 +5,27 @@ namespace ExcelToDatabase.Service
 {
     public class ExcelDataService
     {
-        public async Task<List<ExcelData>> ReadDataFromExcelAsync(string filePath)
+        private readonly string _filePath;
+
+        public ExcelDataService(string filePath)
+        {
+            _filePath = filePath;
+        }
+        public async Task<List<ExcelData>> ReadDataFromExcelAsync()
         {
             // Set the license context
             ExcelPackage.LicenseContext = LicenseContext.Commercial;
 
-            Console.WriteLine($"Starting to read data from Excel file at: {filePath}");
+            Console.WriteLine($"Starting to read data from Excel file at: {_filePath}");
 
             List<ExcelData> data = new List<ExcelData>();
-            if (!File.Exists(filePath))
+            if (!File.Exists(_filePath))
             {
-                Console.WriteLine($"The specified Excel file does not exist at: {Path.GetFullPath(filePath)}");
+                Console.WriteLine($"The specified Excel file does not exist at: {Path.GetFullPath(_filePath)}");
                 return data;
             }
 
-            using (var package = new ExcelPackage(new FileInfo(filePath)))
+            using (var package = new ExcelPackage(new FileInfo(_filePath)))
             {
                 if (package.Workbook.Worksheets.Count == 0)
                 {
