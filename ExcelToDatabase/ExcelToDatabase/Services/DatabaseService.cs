@@ -32,9 +32,9 @@ namespace ExcelToDatabase.Service
                         command.Parameters.AddWithValue("@Gross", row.Gross);
                         command.Parameters.AddWithValue("@WorkingDays", row.WorkingDays);
                         command.Parameters.AddWithValue("@Salary", row.Salary);
-                        command.Parameters.AddWithValue("@EarnedBasic", row.EarnedBasic);
-                        command.Parameters.AddWithValue("@HRA", row.HRA);
-                        command.Parameters.AddWithValue("@SpecialAllowance", row.SpecialAllowance);
+                        command.Parameters.AddWithValue("@EarnedBasic", "row.EarnedBasic");
+                        command.Parameters.AddWithValue("@HRA", "row.HRA");
+                        command.Parameters.AddWithValue("@SpecialAllowance", "row.SpecialAllowance");
                         command.Parameters.AddWithValue("@PT", row.PT);
                         command.Parameters.AddWithValue("@IT_TDS", row.IT_TDS);
                         command.Parameters.AddWithValue("@PF", row.PF);
