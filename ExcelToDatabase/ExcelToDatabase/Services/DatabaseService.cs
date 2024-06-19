@@ -22,34 +22,8 @@ namespace ExcelToDatabase.Service
 
                 foreach (var row in data)
                 {
-                    string insertQuery = @"INSERT INTO SalaryMetadata (
-                                                Emp_Code,
-                                                PaySlipForMonth,
-                                                DaysPaid,
-                                                AbsentDays,
-                                                EarnedBasic,
-                                                HRA,
-                                                SpecialAllowance,
-                                                PFEmployeeShare,
-                                                ProfessionalTax,
-                                                TDS,
-                                                EarningTotal,
-                                                TotalDeductions,
-                                                NetPay
-                                            ) VALUES (
-                                                @Emp_Code,
-                                                @PaySlipForMonth,
-                                                @DaysPaid,
-                                                @AbsentDays,
-                                                @EarnedBasic,
-                                                @HRA,
-                                                @SpecialAllowance,
-                                                @PFEmployeeShare,
-                                                @ProfessionalTax,
-                                                @TDS,
-                                                @EarningTotal,
-                                                @TotalDeductions,
-                                                @NetPay)";
+                    string insertQuery = @"INSERT INTO SalaryMetadata (Emp_Code,PaySlipForMonth,DaysPaid,AbsentDays,EarnedBasic,HRA,SpecialAllowance,PFEmployeeShare,ProfessionalTax,TDS,EarningTotal,TotalDeductions,NetPay) 
+                                           VALUES (@Emp_Code,@PaySlipForMonth,@DaysPaid,@AbsentDays,@EarnedBasic,@HRA,@SpecialAllowance,@PFEmployeeShare,@ProfessionalTax,@TDS,@EarningTotal,@TotalDeductions,@NetPay)";
 
                     await using (SqlCommand command = new SqlCommand(insertQuery, connection))
                     {
