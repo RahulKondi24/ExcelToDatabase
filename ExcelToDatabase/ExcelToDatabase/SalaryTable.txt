@@ -1,0 +1,19 @@
+﻿Create Table SalaryMetadata
+(
+Id int primary key Identity(1,1),
+Emp_Code varchar(255) foreign key references Employee(Emp_Code) ,
+PaySlipForMonth varchar(250),
+DaysPaid decimal,
+AbsentDays decimal,
+EarnedBasic decimal,
+HRA decimal,
+SpecialAllowance decimal,
+PFEmployeeShare decimal,
+ProfessionalTax decimal,
+TDS decimal,
+EarningTotal decimal,
+TotalDeductions decimal,
+NetPay decimal
+)
+
+SELECT * FROM SalaryMetadata;

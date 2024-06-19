@@ -55,12 +55,9 @@ namespace ExcelToDatabase.Service
                         SalaryMetadata rowData = new SalaryMetadata
                         {
                             Emp_Code = worksheet.Cells[row, 3].Value?.ToString(),
-                            PaySlipForMonth = DateTime.Now.ToString("yyyy-MM"),
+                            PaySlipForMonth = DateTime.Now.ToString("yyyy-MMMM"),
                             DaysPaid = decimal.TryParse(worksheet.Cells[row, 8].Value?.ToString(), out var daysPaid) ? daysPaid : 0,
                             AbsentDays = decimal.TryParse(worksheet.Cells[row, 6].Value?.ToString(), out var absentDays) ? absentDays : 0,
-                            EarnedBasic =0,
-                            HRA = 0,
-                            SpecialAllowance = 0,
                             PFEmployeeShare = decimal.TryParse(worksheet.Cells[row, 12].Value?.ToString(), out var pfEmployeeShare) ? pfEmployeeShare : 0,
                             ProfessionalTax = decimal.TryParse(worksheet.Cells[row, 10].Value?.ToString(), out var professionalTax) ? professionalTax : 0,
                             TDS = decimal.TryParse(worksheet.Cells[row, 11].Value?.ToString(), out var tds) ? tds : 0,
