@@ -7,18 +7,14 @@ namespace ExcelToDatabase.Service
     public class ExcelDataService
     {
         private readonly string _filePath;
-
         public ExcelDataService(string filePath)
         {
             _filePath = filePath;
         }
         public async Task<List<SalaryMetadata>> ReadDataFromExcelAsync()
         {
-            // Set the license context
             ExcelPackage.LicenseContext = LicenseContext.Commercial;
-
             Console.WriteLine($"Starting to read data from Excel file at: {_filePath}");
-
             List<SalaryMetadata> data = new List<SalaryMetadata>();
             if (!File.Exists(_filePath))
             {
@@ -34,14 +30,12 @@ namespace ExcelToDatabase.Service
                         Console.WriteLine("The Excel file does not contain any worksheets.");
                         return data;
                     }
-
-                    var worksheet = package.Workbook.Worksheets[0]; // Assuming the data is in the first worksheet
+                    var worksheet = package.Workbook.Worksheets[0];
                     if (worksheet == null)
                     {
                         Console.WriteLine("The specified worksheet does not exist.");
                         return data;
                     }
-
                     var rowCount = worksheet.Dimension?.Rows ?? 0;
                     if (rowCount == 0)
                     {
@@ -49,8 +43,7 @@ namespace ExcelToDatabase.Service
                         return data;
                     }
                     Console.WriteLine($"Total rows found in Excel: {rowCount - 2}");
-
-                    for (int row = 3; row <= rowCount; row++) // Start from row 3, assuming row 1 is the header
+                    for (int row = 3; row <= rowCount; row++)
                     {
                         SalaryMetadata rowData = new SalaryMetadata
                         {

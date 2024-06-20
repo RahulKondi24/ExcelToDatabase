@@ -1,17 +1,16 @@
 ﻿using System.Data.SqlClient;
 using ExcelToDatabase.Models;
+using ExcelToDatabase.Services.Interface;
 
 namespace ExcelToDatabase.Service
 {
-    public class DatabaseService
+    public class DatabaseService : IDatabaseService
     {
         private readonly string _connectionString;
-
         public DatabaseService(string connectionString)
         {
             _connectionString = connectionString;
         }
-
         public async Task InsertDataIntoDatabaseAsync(List<SalaryMetadata> data)
         {
             Console.WriteLine("Starting to insert data into the database...");
@@ -19,12 +18,10 @@ namespace ExcelToDatabase.Service
             {
                 await connection.OpenAsync();
                 Console.WriteLine("Database connection opened.");
-
                 foreach (var row in data)
                 {
                     string insertQuery = @"INSERT INTO SalaryMetadata (Emp_Code,PaySlipForMonth,DaysPaid,AbsentDays,EarnedBasic,HRA,SpecialAllowance,PFEmployeeShare,ProfessionalTax,TDS,EarningTotal,TotalDeductions,NetPay) 
                                            VALUES (@Emp_Code,@PaySlipForMonth,@DaysPaid,@AbsentDays,@EarnedBasic,@HRA,@SpecialAllowance,@PFEmployeeShare,@ProfessionalTax,@TDS,@EarningTotal,@TotalDeductions,@NetPay)";
-
                     await using (SqlCommand command = new SqlCommand(insertQuery, connection))
                     {
                         command.Parameters.AddWithValue("@Emp_Code", row.Emp_Code);
@@ -41,11 +38,8 @@ namespace ExcelToDatabase.Service
                             command.Parameters.AddWithValue("@EarnedBasic", earnedBasic);
                             command.Parameters.AddWithValue("@HRA", hra);
                             command.Parameters.AddWithValue("@SpecialAllowance", specialAllowance);
-
                             command.Parameters.AddWithValue("@EarningTotal", Convert.ToDecimal(row.NetPay));
-                            decimal totalDeductions = (Convert.ToDecimal(row.ProfessionalTax))
-                                                      + (Convert.ToDecimal(row.PFEmployeeShare))
-                                                      + (Convert.ToDecimal(row.TDS));
+                            decimal totalDeductions = (Convert.ToDecimal(row.ProfessionalTax))+(Convert.ToDecimal(row.PFEmployeeShare))+(Convert.ToDecimal(row.TDS));
                             command.Parameters.AddWithValue("@TotalDeductions", totalDeductions);
                             command.Parameters.AddWithValue("@NetPay", Convert.ToDecimal(row.NetPay));
                         }
@@ -62,12 +56,10 @@ namespace ExcelToDatabase.Service
                         command.Parameters.AddWithValue("@PFEmployeeShare", Convert.ToDecimal(row.PFEmployeeShare));
                         command.Parameters.AddWithValue("@ProfessionalTax", Convert.ToDecimal(row.ProfessionalTax));
                         command.Parameters.AddWithValue("@TDS", Convert.ToDecimal(row.TDS));
-
                         await command.ExecuteNonQueryAsync();
                         Console.WriteLine($"Inserted employee {row.Emp_Code} into the database.");
                     }
                 }
-
                 Console.WriteLine("Finished inserting data into the database.");
             }
         }
